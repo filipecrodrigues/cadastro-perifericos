@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Periféricos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+    <h1 class="text-center">Lista de Periféricos</h1>
+
+    <!-- Botões de Ação -->
+    <div class="mb-3">
+        <!-- Botão para Adicionar Periférico -->
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#adicionarModal">Adicionar Periférico</button>
+
+        <!-- Botão para Gerar Relatório Excel -->
+        <a href="http://localhost:8080/api/perifericos/excel" class="btn btn-primary">Gerar Relatório Excel</a>
+
+        <!-- Formulário de Busca -->
+        <form action="/perifericos/buscar" method="get" class="d-inline">
+            <input type="text" name="query" placeholder="Buscar por nome..." class="form-control d-inline" style="width: 250px;">
+            <button type="submit" class="btn btn-warning">Buscar</button>
+        </form>
+    </div>
+
+    <!-- Tabela para listar os periféricos -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Número de Série</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Data de Entrega</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop para renderizar os periféricos -->
+        <tr th:each="periferico : ${perifericos}">
+            <td th:text="${periferico.numeroSerie}"></td>
+            <td th:text="${periferico.marca}"></td>
+            <td th:text="${periferico.modelo}"></td>
+            <td th:text="${periferico.dataEntrega}"></td>
+            <td>
+                <a th:href="@{/perifericos/{id}(id=${periferico.id})}" class="btn btn-info">Detalhes</a>
+                <a th:href="@{/perifericos/deletar/{id}(id=${periferico.id})}" class="btn btn-danger">Excluir</a>
+                <a th:href="@{/perifericos/editar/{id}(id=${periferico.id})}" class="btn btn-warning">Editar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para Adicionar Periférico -->
+<div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="adicionarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adicionarModalLabel">Adicionar Periférico</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulário dentro do modal -->
+                <form action="/perifericos/" method="post">
+                    <div class="mb-3">
+                        <label for="numeroSerie" class="form-label">Número de Série</label>
+                        <input type="text" class="form-control" id="numeroSerie" name="numeroSerie" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="marca" class="form-label">Marca</label>
+                        <input type="text" class="form-control" id="marca" name="marca" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modelo" class="form-label">Modelo</label>
+                        <input type="text" class="form-control" id="modelo" name="modelo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dataEntrega" class="form-label">Data de Entrega</label>
+                        <input type="date" class="form-control" id="dataEntrega" name="dataEntrega" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
