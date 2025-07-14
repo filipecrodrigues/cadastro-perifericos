@@ -4,6 +4,8 @@ import com.cadastro.perifericos.entites.Periferico;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -22,5 +24,16 @@ public class PerifericoThymeleafController {
         List<Periferico> perifericoList = Arrays.asList(perifericos);
         model.addAttribute("perifericos", perifericoList);
         return "perifericos"; // Nome do template Thymeleaf
+
+    }
+        @PostMapping({"/perifericos", "/perifericos/"})
+        public String adicionarPeriferico(@ModelAttribute Periferico periferico) {
+            RestTemplate restTemplate = new RestTemplate();
+
+            // Fazer POST para a API REST
+            restTemplate.postForObject(apiUrl, periferico, Periferico.class);
+
+            // Redirecionar para a lista após cadastrar
+            return "redirect:/perifericos/";
     }
 }
